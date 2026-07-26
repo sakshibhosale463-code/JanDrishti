@@ -1,0 +1,13 @@
+﻿@*localization service for installation service
+    we do not use standard localization because database is not installed yet
+    locale resources for installation process are stored into \App_Data\Localization\Installation directory*@
+@inject IInstallationLocalizationService ILS
+
+@removeTagHelper *, Project.Web.Framework
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using Project.Data
+@using Project.Services.Common
+@using Project.Admin.Models.Install
+@using System.Text.Encodings.Web
+@using Project.Admin.Infrastructure.Installation

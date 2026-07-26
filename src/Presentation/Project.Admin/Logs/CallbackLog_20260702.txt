@@ -1,0 +1,8 @@
+[2026-07-02 15:06:11] ======================================================
+[2026-07-02 15:06:12] Callback Started
+[2026-07-02 15:06:12] OrderId : ORDER_4DB9B33F46D54E73BC6A69BD8AE25CDB
+[2026-07-02 15:06:15] Calling PhonePe Status API...
+[2026-07-02 15:06:32] EXCEPTION OCCURRED
+[2026-07-02 15:06:37] System.Exception: PhonePe status check failed: BadRequest | {"message":"Bad Request - Api Mapping Not Found"}
+   at PhonePeService.GetOrderStatusAsync(String merchantOrderId) in C:\Users\Admin\Downloads\ProjectGyaan\src\Libraries\Project.Services\Payment\PhonePeService.cs:line 158
+   at Project.Admin.Controllers.PaymentController.Callback(String orderId) in C:\Users\Admin\Downloads\ProjectGyaan\src\Presentation\Project.Admin\Controllers\PaymentController.cs:line 252

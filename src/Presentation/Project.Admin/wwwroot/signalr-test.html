@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+</head>
+<body>
+
+    <h2>SignalR Test</h2>
+
+    <p>Status: <b id="status">Connecting...</b></p>
+
+    <ul id="messages"></ul>
+
+    <script>
+        const statusEl = document.getElementById("status");
+        const messagesEl = document.getElementById("messages");
+
+        function addMessage(title, data) {
+            const li = document.createElement("li");
+            li.innerText = title + " : " + JSON.stringify(data);
+            messagesEl.prepend(li);
+        }
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ProjectGyaanRegistrationCreated", (data) => {
+            console.log("ProjectGyaanRegistrationCreated:", data);
+            addMessage("ProjectGyaanRegistrationCreated", data);
+            alert("ProjectGyaanRegistration : " + JSON.stringify(data));
+        });
+
+        connection.on("CollegeEnquiryCreated", (data) => {
+            console.log("CollegeEnquiryCreated:", data);
+            addMessage("CollegeEnquiryCreated", data);
+            alert("CollegeEnquiry : " + JSON.stringify(data));
+        });
+
+        connection.onreconnecting(() => { statusEl.innerText = "Reconnecting..."; });
+        connection.onreconnected(() => { statusEl.innerText = "Connected"; });
+        connection.onclose(() => { statusEl.innerText = "Disconnected"; }); connection.start()
+            .then(() => { statusEl.innerText = "Connected"; console.log("SignalR Connected"); })
+            .catch(err => { statusEl.innerText = "Connection Failed"; console.error(err); });
+    </script>
+
+</body>
+</html>

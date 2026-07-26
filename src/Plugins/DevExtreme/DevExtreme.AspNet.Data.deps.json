@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "DevExtreme.AspNet.Data/99.0": {
+        "runtime": {
+          "DevExtreme.AspNet.Data.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DevExtreme.AspNet.Data/99.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
