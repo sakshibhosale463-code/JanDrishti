@@ -141,10 +141,6 @@ public class RegistrationController : BaseProtectedController
         data.CreatedBy = "System";
         data.CreatedOn = DateTime.Now;
         data.IsActive = false;
-        data.IsPayment = false;
-        data.PaymentStatus = (int)PaymentStatusEnum.Pending;
-        data.PaidAmount = 0;
-        data.AssessmentStatus = (int)AssessmentStatusEnum.Pending;
         data.Password = EncryptionHelper.EncryptPassword(model.Password);
         var registrationId = await _registrationMasterService.InsertRegistrationMasterAsync(data);
 
@@ -284,7 +280,7 @@ public class RegistrationController : BaseProtectedController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProjectGyaanRegistrationDetails(long id)
+    public async Task<IActionResult> GetRegistrationDetails(long id)
     {
         var registration = await _registrationMasterService.GetRegistrationMasterByIdAsync(id);
         if (registration == null)
@@ -296,7 +292,7 @@ public class RegistrationController : BaseProtectedController
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateProjectGyaanRegistration(UserRegistrationModel model)
+    public async Task<IActionResult> UpdateRegistration(UserRegistrationModel model)
     {
         if (model == null)
             return Error("", "Model should be data");
@@ -310,9 +306,6 @@ public class RegistrationController : BaseProtectedController
             return Error("", "User not found.");
 
         registration = model.ToEntity(registration);
-        registration.IsPayment = true;
-        registration.PaymentStatus = (int)PaymentStatusEnum.Paid;
-        registration.PaidAmount = model.PaidAmount;
         registration.UpdatedBy = "System";
         registration.UpdatedOn = DateTime.Now;
         registration.Password = EncryptionHelper.EncryptPassword(model.Password);

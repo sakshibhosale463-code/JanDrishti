@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project.Admin.Factories;
-using Project.Admin.Models.Certificate;
 using Project.Admin.Models.Users;
 using Project.Core.Configuration;
 using Project.Core.Infrastructure;

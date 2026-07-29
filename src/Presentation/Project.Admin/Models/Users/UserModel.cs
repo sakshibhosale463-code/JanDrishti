@@ -5,18 +5,6 @@ namespace Project.Admin.Models.Users;
 
 public partial record UserModel : BaseModel
 {
-    #region Constructor
-
-    public UserModel()
-    {
-      
-        AvailableRoles = new List<SelectListModel>();
-        AvailableDomains = new List<SelectListItem>();
-        AvailableTrainsers = new List<SelectListItem>();
-    }
-
-    #endregion
-
     #region Properties
 
     public string Name { get; set; }
@@ -30,10 +18,6 @@ public partial record UserModel : BaseModel
     public string Remark { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; }
-    public List<long> DomainIds { get; set; }
-    public IList<SelectListModel> AvailableRoles { get; set; }
-    public IList<SelectListItem> AvailableDomains { get; set; }
-    public IList<SelectListItem> AvailableTrainsers { get; set; }
 
     #endregion
 }

@@ -130,10 +130,6 @@ public class RegistrationModelFactory : IRegistrationModelFactory
             model.Role = roledata.Name;
             model.SystemName= roledata.SystemName;
         }
-        model.AssessmentStatus = registrationMaster.AssessmentStatus;
-        model.PaymentStatus = (int)registrationMaster.PaymentStatus;
-        model.IsPayment = registrationMaster.IsPayment;
-        model.PaidAmount = registrationMaster.PaidAmount;
         return model;
     }
 

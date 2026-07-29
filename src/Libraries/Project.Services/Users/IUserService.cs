@@ -117,25 +117,6 @@ public partial interface IUserService
 
     Task<IList<SelectListItem>> GetTrainerSelectListSAsync();
 
-    /// <summary>
-    /// Gets all users
-    /// </summary>
-    /// <param name="searchText">User search text; null to load all records</param>
-    /// <param name="pageIndex">Page index</param>
-    /// <param name="pageSize">Page size</param>
-    /// <param name="showHidden">A value indicating whether to show hidden records</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the users list
-    /// </returns>
-
-    Task<IList<UserDomainMapping>> GetUserDomainMappingListByUserIdAsync(long userId);
-    Task DeleteUserDomainMappingAsync(UserDomainMapping entity);
-    Task InsertUserDomainMappingAsync(UserDomainMapping entity);
-    Task UpdateUserDomainMappingAsync(UserDomainMapping entity);
-
-    Task<IList<SelectListItem>> GetDomainWiseTrainerSelectListSAsync(long domainId);
-
     #region Message Template
 
     Task<MessageTemplate> GetEmailTemplateByNameAsync(string name);

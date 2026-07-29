@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Project.Core.Configuration;
 using Project.Core.Domain.Candidate;
 using Project.Core.Domain.Users;
-using Project.Services.Candidate;
+using Project.Services.Registration;
 using Project.Services.Users;
 
 namespace Project.Services.Authentication;

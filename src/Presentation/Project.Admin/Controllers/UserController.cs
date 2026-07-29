@@ -57,73 +57,6 @@ public class UserController : BaseProtectedController
     #region Utilities
 
 
-    [HttpPost]
-    protected virtual async Task SaveUserDomainMapping(UserModel model)
-    {
-        //remove User
-        var userTaskMapp = await _userService.GetUserDomainMappingListByUserIdAsync(model.Id);
-
-        if (userTaskMapp != null)
-        {
-            foreach (var userTaskMap in userTaskMapp)
-            {
-                if (!model.DomainIds.Contains((int)userTaskMap.UserId))
-                    await _userService.DeleteUserDomainMappingAsync(userTaskMap);
-            }
-        }
-
-        // User
-        if (model.DomainIds.Count > 0)
-        {
-            foreach (var item in model.DomainIds)
-            {
-                var isExistUser = userTaskMapp.Any(u => u.DomainId == item);
-                if (!isExistUser)
-                {
-                    var userTaskMapping = new UserDomainMapping();
-                    userTaskMapping.DomainId = item;
-                    userTaskMapping.UserId = model.Id;
-                    await _userService.InsertUserDomainMappingAsync(userTaskMapping);
-                }
-            }
-        }
-    }
-
-    protected virtual async Task UpdateUserDomainMappingAsync(UserModel model)
-    {
-        // Get existing mappings
-        var existingMappings = await _userService.GetUserDomainMappingListByUserIdAsync(model.Id)
-                                ?? new List<UserDomainMapping>();
-
-        var existingDomainIds = existingMappings.Select(x => x.DomainId).ToList();
-
-        // 1️⃣ Delete removed domains
-        var domainsToDelete = existingMappings
-            .Where(x => !model.DomainIds.Contains(x.DomainId))
-            .ToList();
-
-        foreach (var mapping in domainsToDelete)
-        {
-            await _userService.DeleteUserDomainMappingAsync(mapping);
-        }
-
-        // Insert new domains
-        var domainsToAdd = model.DomainIds
-            .Where(id => !existingDomainIds.Contains(id))
-            .ToList();
-
-        foreach (var domainId in domainsToAdd)
-        {
-            var mapping = new UserDomainMapping
-            {
-                UserId = model.Id,
-                DomainId = domainId
-            };
-
-            await _userService.InsertUserDomainMappingAsync(mapping);
-        }
-    }
-
         #endregion
 
     #region Methods
@@ -183,7 +116,6 @@ public class UserController : BaseProtectedController
         await _userService.InsertUserAsync(user);
 
         model.Id = user.Id;
-        await SaveUserDomainMapping(model);
 
         return Success(user, "User inserted successfully.");
     }
@@ -199,17 +131,12 @@ public class UserController : BaseProtectedController
         if (exists)
             return Error("", "Email or mobile number already exists.");
 
-        var domainMapping = await _userService.GetUserDomainMappingListByUserIdAsync(user.Id);
-        if (domainMapping == null)
-            return Error("", "Domain not assigned to user.");
-
         user = model.ToEntity(user);
         user.UpdatedOnUtc = DateTime.Now;
         user.Password = EncryptionHelper.EncryptPassword(model.Password);
         await _userService.UpdateUserAsync(user);
 
         model.Id = user.Id;
-        await UpdateUserDomainMappingAsync(model);
 
         return Success(user, "User Updated successfully.");
     }
@@ -345,19 +272,5 @@ public class UserController : BaseProtectedController
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetTrainerSelectList(long domainId)
-    {
-        if (domainId <= 0)
-            return Error("", "Invalid domain id");
-
-        var model = await _userService.GetDomainWiseTrainerSelectListSAsync(domainId);
-
-        if (!model.Any())
-            return Error("", "Trainer not found for this domain");
-
-        return Success(model);
-    }
-    
     #endregion
 }   

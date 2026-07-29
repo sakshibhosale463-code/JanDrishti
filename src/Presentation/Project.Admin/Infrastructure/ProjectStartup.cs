@@ -1,10 +1,7 @@
-﻿
-using Project.Admin.Area.Factories;
-using Project.Admin.Factories;
+﻿using Project.Admin.Factories;
 using Project.Admin.Infrastructure.Installation;
 using Project.Admin.Infrastructure.Services;
 using Project.Core.Infrastructure;
-using Project.Services.Certificate;
 
 namespace Project.Admin.Infrastructure;
 
@@ -28,12 +25,6 @@ public partial class ProjectStartup : IProjectStartup
         services.AddScoped<IUserRoleModelFactory, UserRoleModelFactory>();
         services.AddScoped<IUserModelFactory, UserModelFactory>();
         services.AddScoped<IRegistrationModelFactory, RegistrationModelFactory>();
-        services.AddScoped<ICommonModelFactory, CommonModelFactory>();
-        services.AddScoped<ISessionModelFactory, SessionModelFactory>();
-        services.AddScoped<IAttendanceModelFactory, AttendanceModelFactory>();
-        services.AddScoped<IBatchModelFactory, BatchModelFactory>();
-        services.AddScoped<ISyllabusModelFactory, SyllabusModelFactory>();
-    
         services.AddHostedService<DailyTaskScheduler>();
     }
 

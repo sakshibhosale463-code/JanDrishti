@@ -26,7 +26,6 @@ public class UserService : IUserService
     private readonly IRepository<UserRole> _userRoleRepository;
     private readonly IRepository<PermissionRecord> _permissionRecordRepository;
     private readonly IRepository<Department> _departmentRepository;
-    private readonly IRepository<UserDomainMapping> _userDomainMappingRepository;
     private readonly IRepository<MessageTemplate> _messageTemplateRepository;
     private readonly IRepository<RegistrationMaster> _registrationMasterRepository;
     #endregion
@@ -39,7 +38,6 @@ public class UserService : IUserService
         IRepository<UserRole> userRoleRepository,
         IRepository<PermissionRecord> permissionRecordRepository,
         IRepository<Department> departmentRepository,
-        IRepository<UserDomainMapping> userDomainMappingRepository,
         IRepository<MessageTemplate> messageTemplateRepository,
         IRepository<RegistrationMaster> registrationMasterRepository)
     {
@@ -49,7 +47,6 @@ public class UserService : IUserService
         _userRoleRepository = userRoleRepository;
         _permissionRecordRepository = permissionRecordRepository;
         _departmentRepository = departmentRepository;
-        _userDomainMappingRepository = userDomainMappingRepository;
         _messageTemplateRepository = messageTemplateRepository;
         _registrationMasterRepository = registrationMasterRepository;
     }
@@ -318,62 +315,6 @@ public class UserService : IUserService
         return query;
     }
 
-
-    #endregion
-
-    #region User Domain Mapping
-
-    public async Task InsertUserDomainMappingAsync(UserDomainMapping entity)
-    {
-        await _userDomainMappingRepository.InsertAsync(entity);
-    }
-
-
-    /// <summary>
-    /// Update user role
-    /// </summary>
-    /// <param name="userRole">userRole</param>
-    /// <returns>
-    /// A task that represents the asynchronous operation
-    /// The task result contains the userRole
-    /// </returns>
-    public async Task UpdateUserDomainMappingAsync(UserDomainMapping entity)
-    {
-        await _userDomainMappingRepository.UpdateAsync(entity);
-    }
-
-    /// <summary>
-    /// Delete user role
-    /// </summary>
-    /// <param name="userRole">userRole</param>
-    /// <returns></returns>
-    public async Task DeleteUserDomainMappingAsync(UserDomainMapping entity)
-    {
-        await _userDomainMappingRepository.DeleteAsync(entity);
-    }
-
-    public async Task<IList<UserDomainMapping>> GetUserDomainMappingListByUserIdAsync(long userId)
-    {
-        var query = _userDomainMappingRepository.Table.Where(e => e.UserId == userId);
-        return await query.ToListAsync();
-    }
-
-    public async Task<IList<SelectListItem>> GetDomainWiseTrainerSelectListSAsync(long domainId)
-    {
-        return await _userRepository.Table
-            .Join(_userDomainMappingRepository.Table,
-                  u => u.Id,
-                  d => d.UserId,
-                  (u, d) => new { u, d })
-            .Where(x => x.d.DomainId == domainId && x.u.RoleId != 2
-                        && !x.u.Deleted && x.u.Active)
-            .Select(x => new SelectListItem
-            {
-                Value = x.u.Id.ToString(),
-                Text = x.u.Name
-            })
-            .ToListAsync();
-    }
 
     #endregion
 

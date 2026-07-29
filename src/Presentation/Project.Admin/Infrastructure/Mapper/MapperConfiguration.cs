@@ -1,23 +1,13 @@
 ﻿using AutoMapper;
 using Project.Admin.Area.Model;
-using Project.Admin.Area.Model.Session;
-using Project.Admin.Models.Assessment;
-using Project.Admin.Models.Attendance;
-using Project.Admin.Models.Batch;
-using Project.Admin.Models.Candidate;
 using Project.Admin.Models.Catalog;
-using Project.Admin.Models.DailyTask;
-using Project.Admin.Models.Domain;
-using Project.Admin.Models.Syllabus;
+using Project.Admin.Models.Registration;
 using Project.Admin.Models.Users;
-using Project.Core.Domain.Assessment;
 using Project.Core.Domain.Candidate;
 using Project.Core.Domain.Catalog;
-using Project.Core.Domain.DailyTask;
-using Project.Core.Domain.Syllabus;
 using Project.Core.Domain.Users;
 using Project.Core.Infrastructure.Mapper;
-using Project.Services.Candidate.EntityModel;
+using Project.Services.Registration.EntityModel;
 using Project.Services.Users.EntityModel;
 
 namespace Project.Admin.Infrastructure.Mapper;
@@ -35,11 +25,6 @@ public partial class MapperConfiguration : Profile, IOrderedMapperProfile
         CreateUserMaps();
         CreateCatalogMaps();
         CreateCandidateMaps();
-        CreateDomain();
-        Master();
-        Batch();
-        Syllabus();
-        Assessment();
     }
 
     #endregion
@@ -94,44 +79,7 @@ public partial class MapperConfiguration : Profile, IOrderedMapperProfile
     {
         CreateMap<RegistrationMaster, UserRegistrationModel>().ReverseMap();
         CreateMap<RegistrationModel, UserRegistrationModel>().ReverseMap();
-        CreateMap<AttendanceEntityModel, AttendanceModel>().ReverseMap();
-        CreateMap<CollegeEnquiryForm, CollegeEnquiryFormModel>().ReverseMap();
-        CreateMap<CollegeEnquiryDomainMapping, CollegeEnquiryFormModel>().ReverseMap();
 
-    }
-
-
-    protected virtual void CreateDomain()
-    {
-        CreateMap<DomainMaster, DomainModel>().ReverseMap();
-        CreateMap<Sessions, SessionModel>().ReverseMap();
-    }
-
-    protected virtual void Master()
-    {
-        CreateMap<DailyTaskMaster, DailyTaskModel>().ReverseMap();
-        CreateMap<TaskSubmissionMaster, TaskSubmissionModel>().ReverseMap();
-        CreateMap<TaskSubmissionModel, TaskSubmissionMaster>().ReverseMap();
-        CreateMap<ViewProgressModel, TaskSubmissionMaster>().ReverseMap();
-
-    }
-    protected virtual void Batch()
-    {
-        CreateMap<BatchMaster, BatchModel>().ReverseMap()
-             .ForMember(dest => dest.SessionDays, opt => opt.Ignore());
-        CreateMap<BatchEnrollmentMaster, CandidateBatchEnrollementModel>();
-    }
-
-    protected virtual void Syllabus()
-    {
-        CreateMap<SyllabusMaster, SyllabusModel>().ReverseMap();
-        CreateMap<SyllabusModule, SyllabusModel>().ReverseMap();
-        CreateMap<SyllabusTopic, SyllabusModel>().ReverseMap();
-    }
-
-    protected virtual void Assessment()
-    {
-        CreateMap<AssessmentMaster, AssessmentRequestModel>().ReverseMap();
     }
 
     #endregion

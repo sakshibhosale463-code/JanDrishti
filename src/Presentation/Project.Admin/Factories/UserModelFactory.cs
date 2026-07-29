@@ -5,10 +5,9 @@ using Project.Core.Domain.Candidate;
 using Project.Core.Domain.Users;
 using Project.Core.Security;
 using Project.Services.Authentication;
-using Project.Services.Candidate;
 using Project.Services.Catalog;
-using Project.Services.Domain;
 using Project.Services.Helpers;
+using Project.Services.Registration;
 using Project.Services.Security;
 using Project.Services.Users;
 using Project.Web.Framework.Infrastructure.Mapper.Extensions;
@@ -26,7 +25,6 @@ public partial record UserModelFactory : IUserModelFactory
     #region Fields
     private readonly IWorkContext _workContext;
     private readonly IUserService _userService;
-    private readonly IDomainService _domainService;
     private readonly IDateTimeHelper _dateTimeHelper;
     private readonly IDepartmentService _departmentService;
     private readonly IPermissionService _permissionService;
@@ -38,7 +36,7 @@ public partial record UserModelFactory : IUserModelFactory
 
     #region Constructor
 
-    public UserModelFactory(IUserService userService, IWorkContext workContext, IDomainService domainService,
+    public UserModelFactory(IUserService userService, IWorkContext workContext,
         IDateTimeHelper dateTimeHelper,
         IDepartmentService departmentService,
         IPermissionService permissionService,
@@ -47,7 +45,6 @@ public partial record UserModelFactory : IUserModelFactory
     {
         _workContext = workContext;
         _userService = userService;
-        _domainService = domainService;
         _dateTimeHelper = dateTimeHelper;
         _departmentService = departmentService;
         _permissionService = permissionService;
@@ -112,23 +109,10 @@ public partial record UserModelFactory : IUserModelFactory
             if (currentUser != null)
             {
                 var userRole = await _userRoleService.GetUserRoleByIdAsync(currentUser.RoleId);
-                if (userRole.SystemName == ProjectUserDefaults.TrainerRoleName)
-                {
-                    var userDomain = await _userService.GetUserDomainMappingListByUserIdAsync(currentUser.Id);
-                    domainIds = userDomain.Select(x => x.DomainId).ToList();
-                }
-                else
-                {
-                    var userDomain = await _userService.GetUserDomainMappingListByUserIdAsync(user.Id);
-                    domainIds = userDomain.Select(x => x.DomainId).ToList();
-                }
-                model.DomainIds = domainIds;
+               
             }
         }
 
-        model.AvailableRoles = (await _userRoleService.GetSelectDataModelListAsync()).ToModel<SelectListModel>();
-        model.AvailableDomains = await _registrationMasterService.GetDomainSelectListSAsync(domainIds);
-        model.AvailableTrainsers = await _userService.GetTrainerSelectListSAsync();
         return model;
     }
 
@@ -151,13 +135,7 @@ public partial record UserModelFactory : IUserModelFactory
         if (currentUser != null)
         {
             var userRole = await _userRoleService.GetUserRoleByIdAsync(currentUser.RoleId);
-            if (userRole.SystemName == ProjectUserDefaults.TrainerRoleName)
-            {
-                var userDomain = await _userService.GetUserDomainMappingListByUserIdAsync(currentUser.Id);
-                //domainIds = userDomain.Select(x => x.DomainId).ToList();
-                var domain = await _domainService.GetDomainList(userDomain.Select(x => x.DomainId).ToList());
-                model.Domains = domain.ToList();
-            }
+            
         }
 
         return model;
@@ -180,10 +158,7 @@ public partial record UserModelFactory : IUserModelFactory
 
                 var role = await _userRoleService.GetUserRoleByIdAsync(user.RoleId);
                 model.Role = role.Name ?? string.Empty;
-
-                var userdomainMapping = await _userService.GetUserDomainMappingListByUserIdAsync(user.Id);
-                model.DomainIds = userdomainMapping.Select(x => x.DomainId).ToList();
-
+               
                 return model;
             });
         });

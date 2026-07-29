@@ -1,8 +1,10 @@
 ﻿using FluentMigrator;
+using Project.Core.Domain.Users;
+using Project.Data.Extensions;
 namespace Project.Data.Migrations.Installation;
 
 
-[ProjectSchemaMigration("2026/06/23 11:43:18:8899799", "Nop.Data base schema", MigrationProcessType.Installation)]
+[ProjectSchemaMigration("2026/06/25 11:43:18:8899799", "Nop.Data base schema", MigrationProcessType.Installation)]
 public class SchemaMigration : ForwardOnlyMigration
 {
 
